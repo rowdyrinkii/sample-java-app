@@ -17,7 +17,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the application on Docker'
-                sh 'docker run -p 8000:8000 -d --name rinki-cont sample-java-app-image'
+                sh 'docker run -p 8000:8080 -d --name rinki-cont sample-java-app-image'
             }
         }
     }
