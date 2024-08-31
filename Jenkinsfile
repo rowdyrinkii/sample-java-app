@@ -4,7 +4,7 @@ pipeline {
         stage('Clone the repo') {
             steps {
                 echo 'Cloning the repository:'
-                #git 'https://github.com/mudit097/node-todo-cicd.git'
+                //git 'https://github.com/mudit097/node-todo-cicd.git'
             }
         }
         stage('Build') {
