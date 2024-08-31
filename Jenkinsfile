@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the ToDo application on Docker'
+                //run this command on ec2 machine -- sudo usermod -aG docker jenkins && sudo systemctl restart docker && sudo systemctl restart jenkins to mke sure that jenkins is able to use docker running on ec2 machine
                 sh 'docker build . -t sample-java-app-image'
             }
         }
