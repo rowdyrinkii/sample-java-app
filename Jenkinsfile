@@ -13,6 +13,8 @@ pipeline {
                     sh ''' sshpass -p dockeruser ssh -o StrictHostKeyChecking=no dockeruser@13.201.168.105 /bin/bash -s << EOT
                     pwd
                     ls -lrth
+                    cd sample-java-app
+                    ls -lrth
                     docker build . -t sample-java-app-image2 &&
                     docker rm -f rinki-conta &&
                     docker run -p 8091:8080 -d --name rinki-conta sample-java-app-image2
