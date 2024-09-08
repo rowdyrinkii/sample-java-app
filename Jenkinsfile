@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-      /*  stage('Build and Push Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
@@ -30,11 +30,11 @@ pipeline {
                 }
             }
         }//
-        */
+        
 
         stage('Deploy to EKS'){
             steps {
-
+// sudo mv /home/ubuntu/kubectl /usr/local/bin/  to make kubectl accessible to jenkins user on ec2 machine so that it is able to run kubectl apply commands.
                 echo "Deploying to EKS"
                 sh "aws eks update-kubeconfig --region ap-south-1 --name test-cluster-01"
                 sh "kubectl apply -f k8-manifests/deployment.yaml"
