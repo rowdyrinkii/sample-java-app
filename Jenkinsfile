@@ -38,6 +38,8 @@ pipeline {
                 echo "Deploying to EKS"
                 sh "aws eks update-kubeconfig --region ap-south-1 --name test-cluster-01"
                 sh "kubectl apply -f k8-manifests/deployment.yaml"
+                sh "kubectl rollout restart deployment/java-app-deployment"
+                sh "kubectl rollout status deployment/java-app-deployment"
             }
                 
         }
