@@ -36,8 +36,7 @@ pipeline {
 
                 echo "Deploying to EKS"
                 sh "aws eks update-kubeconfig --region ap-south-1 --name test-cluster-01"
-                sh "ls"
-                sh "pwd"
+                sh "kubectl apply -f k8-manifests/deployment.yaml"
             }
                 
         }
