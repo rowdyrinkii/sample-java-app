@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Build and Push Docker Image') {
+      /*  stage('Build and Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
@@ -30,6 +30,7 @@ pipeline {
                 }
             }
         }//
+        */
 
         stage('Deploy to EKS'){
             steps {
