@@ -30,5 +30,17 @@ pipeline {
                 }
             }
         }//
+
+        stage('Deploy to EKS'){
+            steps {
+
+                echo "Deploying to EKS"
+                sh "aws eks update-kubeconfig --region ap-south-1 --name test-cluster-01"
+                ls
+                pwd
+            }
+                
+        }
+            
     }
 }
