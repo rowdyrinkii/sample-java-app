@@ -1,25 +1,34 @@
 pipeline {
     agent any
     stages {
-        stage('Clone the repo') {
+        stage('Build and Push Docker Image') {
             steps {
-                echo 'Cloning the repository:'
-                //git 'https://github.com/mudit097/node-todo-cicd.git'
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'ecr-demo-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        // Login to ECR
+                        sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 387620062696.dkr.ecr.ap-south-1.amazonaws.com"
+
+                        // Build Docker image with default latest tag
+                        sh "docker build -t test/firstcodedeploy ."
+
+                        // Tag Docker image with tag latest and repo name 
+                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+
+                        // Push latest tag Docker image to ECR
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest"
+
+                        // Tag Docker image with tag Build number and repo name 
+                        sh "docker tag test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+
+                        // Push Build number tag Docker image to ECR
+                        sh "docker push 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+                        
+                        // remove all tags images from ec2 jenkins machine docker cache
+                        sh "docker image rm test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:latest 387620062696.dkr.ecr.ap-south-1.amazonaws.com/test/firstcodedeploy:${BUILD_TAG}"
+
+                    }
+                }
             }
-        }
-        stage('Build') {
-            steps {
-                echo 'Building the ToDo application on Docker'
-                //run this command on ec2 machine -- sudo usermod -aG docker jenkins && sudo systemctl restart docker && sudo systemctl restart jenkins to mke sure that jenkins is able to use docker running on ec2 machine
-                sh 'docker build . -t sample-java-app-image'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application on Docker'
-                sh 'docker rm -f rinki-cont'
-                sh 'docker run -p 8000:8080 -d --name rinki-cont sample-java-app-image'
-            }
-        }
+        }//
     }
 }
